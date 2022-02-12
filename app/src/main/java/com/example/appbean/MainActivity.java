@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity {
@@ -71,13 +73,14 @@ public class MainActivity extends AppCompatActivity {
             ModelfermentedcocoabeanVersion10.Outputs outputs = Modelo.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
             Modelo.close();
-            if (outputFeature0.getFloatArray()[0] == 0) {
-                                                            twResultado.setText("Buena Fermentacion");
-            } else if (outputFeature0.getFloatArray()[0] == 1) {
-                 twResultado.setText("Mediana Fermentacion");
-            } else if (outputFeature0.getFloatArray()[0] == 2) {
-                 twResultado.setText("Moho");
-            } else if (outputFeature0.getFloatArray()[0] == 3) {
+            float[] A = outputFeature0.getFloatArray();
+            if (outputFeature0.getFloatArray()[0] == 1) {
+                twResultado.setText("Buena Fermentacion");
+            } else if (outputFeature0.getFloatArray()[1] == 1) {
+                twResultado.setText("Mediana Fermentacion");
+            } else if (outputFeature0.getFloatArray()[2] == 1) {
+                twResultado.setText("Moho");
+            } else if (outputFeature0.getFloatArray()[3] == 1) {
                 twResultado.setText("Violeta");
             }
         } catch (IOException e) {
